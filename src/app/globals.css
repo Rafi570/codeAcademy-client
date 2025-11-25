@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+/* globals.css */
+body {
+  @apply bg-gray-50 text-gray-800;
+}
