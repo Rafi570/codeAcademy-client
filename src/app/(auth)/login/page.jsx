@@ -1,15 +1,13 @@
-"use client"; // Client Component
+"use client";
 
 import { useContext, useState } from "react";
 import Cookies from "js-cookie";
-
 import Link from "next/link";
-import { AuthContext } from "@/Context/AuthProvider"; // নিশ্চিত করুন এই পাথটি ঠিক আছে
+import { AuthContext } from "@/Context/AuthProvider"; 
 import { useRouter } from "next/navigation";
 
 export default function LogIn() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,42 +16,52 @@ export default function LogIn() {
   // ---------------------
   // Email + Password Login
   // ---------------------
-const handleLog = async (e) => {
-  e.preventDefault();
+  const handleLog = async (e) => {
+    e.preventDefault();
 
-  try {
-    const userData = await login(email, password); // login function থেকে user info বা token পাও
-
-    // Cookie set
-    Cookies.set("auth", JSON.stringify(userData), { expires: 1 }); // 1 day expiry
-
-    alert("Login Successful!");
-    router.push("/");
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
-};
+    try {
+      const userData = await login(email, password);
+      Cookies.set("auth", JSON.stringify(userData), { expires: 1 });
+      alert("Login Successful!");
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
 
   // ---------------------
   // Google Login
   // ---------------------
-const handleGoogle = async () => {
-  try {
-    const userData = await loginWithGoogle();
+  const handleGoogle = async () => {
+    try {
+      const userData = await loginWithGoogle();
+      Cookies.set("auth", JSON.stringify(userData), { expires: 1 });
+      alert("Google Login Successful!");
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
 
-    // Cookie set
-    Cookies.set("auth", JSON.stringify(userData), { expires: 1 });
+  // ---------------------
+  // Demo Login
+  // ---------------------
+  const handleDemo = async () => {
+    try {
+      const demoEmail = "admin570@gmail.com";
+      const demoPassword = "Rafi570@";
 
-    alert("Google Login Successful!");
-    router.push("/");
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
-};
-
-
+      const userData = await login(demoEmail, demoPassword);
+      Cookies.set("auth", JSON.stringify(userData), { expires: 1 });
+      alert("Demo Login Successful!");
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      alert("Demo login failed!");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -107,6 +115,16 @@ const handleGoogle = async () => {
             <span className="text-gray-700 font-semibold">
               Continue with Google
             </span>
+          </button>
+        </div>
+
+        {/* Demo Login Button */}
+        <div className="mt-4">
+          <button
+            onClick={handleDemo}
+            className="w-full py-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg transition shadow-sm"
+          >
+            Demo Login
           </button>
         </div>
 
